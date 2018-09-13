@@ -1,0 +1,110 @@
+U-Boot 2009.08-dirty (Jun 27 2013 - 16:26:46)
+
+CPU: Freescale i.MX6 family TO1.2 at 792 MHz
+Temperature:   25 C, calibration data 0x5b75087d
+mx6q pll1: 792MHz
+mx6q pll2: 528MHz
+mx6q pll3: 480MHz
+mx6q pll8: 50MHz
+ipg clock     : 66000000Hz
+ipg per clock : 66000000Hz
+uart clock    : 80000000Hz
+cspi clock    : 60000000Hz
+ahb clock     : 132000000Hz                                                     
+axi clock   : 264000000Hz                                                       
+emi_slow clock: 132000000Hz                                                     
+ddr clock     : 528000000Hz                                                     
+usdhc1 clock  : 198000000Hz                                                     
+usdhc2 clock  : 198000000Hz                                                     
+usdhc3 clock  : 198000000Hz                                                     
+usdhc4 clock  : 198000000Hz                                                     
+nfc clock     : 24000000Hz                                                      
+Board: MX6Q-SABRELITE:[ POR]                                                    
+Boot Device: I2C                                                                
+I2C:   ready                                                                    
+DRAM:   1 GB                                                                    
+MMC:   FSL_USDHC: 0,FSL_USDHC: 1                                                
+JEDEC ID: 0xbf:0x25:0x41                                                        
+Reading SPI NOR flash 0xc0000 [0x2000 bytes] -> ram 0x276009b8                  
+SUCCESS                                                                         
+                                                                                
+*** Warning - bad CRC, using default environment                                
+                                                                                
+In:    serial                                                                   
+Out:   serial                                                                   
+Err:   serial                                                                   
+Net:   got MAC address from IIM: 00:19:b8:02:c9:bf                              
+FEC0 [PRIME]                                                                    
+Warning: FEC0 MAC addresses don't match:                                        
+Address in SROM is         00:19:b8:02:c9:bf                                    
+Address in environment is  00:19:b8:00:f0:a3                                    
+                                                                                
+Hit any key to stop autoboot:  0                                                
+ERTOS MX6Q SABRELITE U-Boot > mmc dev 0                                         
+mmc0 is current device                                                          
+ERTOS MX6Q SABRELITE U-Boot > fatload mmc 0 0x30000000 image.elf                
+reading image.elf                                                               
+                                                                                
+1933784 bytes read                                                              
+ERTOS MX6Q SABRELITE U-Boot > bootelf 0x30000000                                
+## Starting application at 0x20000000 ...                                       
+                                                                                
+ELF-loader started on CPU: ARM Ltd. Cortex-A9 r2p10                             
+  paddr=[20000000..201c801f]                                                    
+ELF-loading image 'kernel'                                                      
+  paddr=[10000000..10039fff]                                                    
+  vaddr=[e0000000..e0039fff]                                                    
+  virt_entry=e0000000                                                           
+ELF-loading image 'genode.elf'                                                  
+  paddr=[1003a000..102ddfff]                                                    
+  vaddr=[2000000..22a3fff]                                                      
+  virt_entry=2000000                                                            
+Enabling MMU and paging                                                         
+Jumping to kernel-image entry point...                                          
+                                                                                
+Info: Not using supported FPU as FPU is disabled in the build configuration     
+Bootstrapping kernel                                                            
+Booting all finished, dropped to user space                                     
+<<seL4(CPU 0) [decodeCNodeInvocation/106 T0xffe7d100 "rootserver" @202d698]: CN>
+Warning: copy: seL4_CNode_Copy (0x7) returned 6                                 
+:phys_mem_16k:     Allocator 0x21d6c74 dump:                                    
+ Block: [10000000,10010000) size=64K avail=64K max_avail=448K                   
+ Block: [102e0000,10350000) size=448K avail=448K max_avail=448K                 
+ => mem_size=524288 (0 MB) / mem_avail=524288 (0 MB)                            
+                                                                                
+virtual address layout of core:                                                 
+ overall    [00002000,c0000000)                                                 
+ core image [02000000,022a4000)                                                 
+ ipc buffer [022a4000,022a5000)                                                 
+ boot_info  [022a5000,022a6000)                                                 
+ stack area [40000000,50000000)                                                 
+Warning: need physical memory, but Platform object not constructed yet          
+Warning: need physical memory, but Platform object not constructed yet          
+Warning: need physical memory, but Platform object not constructed yet          
+boot module 'config' (342 bytes)                                                
+boot module 'test-log' (22996 bytes)                                            
+boot module 'init' (206988 bytes)                                               
+boot module 'ld.lib.so' (581492 bytes)                                          
+Warning: need physical memory, but Platform object not constructed yet          
+Genode 18.05                                                                    
+456 MiB RAM and 31767 caps assigned to init                                     
+Warning: void Genode::Rpc_cap_factory::free(Genode::Native_capability) not impl1
+Warning: void Genode::Rpc_cap_factory::free(Genode::Native_capability) not impl2
+Warning: void Genode::Rpc_cap_factory::free(Genode::Native_capability) not impl4
+[init -> test-log] hex range:          [0e00,1680)                              
+[init -> test-log] empty hex range:    [0abc0000,0abc0000) (empty!)             
+[init -> test-log] hex range to limit: [f8,ff]                                  
+[init -> test-log] invalid hex range:  [f8,08) (overflow!)                      
+[init -> test-log] negative hex char:  0xfe                                     
+[init -> test-log] positive hex char:  0x02                                     
+[init -> test-log] multiarg string:    "parent -> child.7"                      
+[init -> test-log] String(Hex(3)):     0x3                                      
+[init -> test-log] Very long messages:                                          
+[init -> test-log -> log] 1....................................................2
+[init -> test-log] 3...........................................................4
+[init -> test-log] 5...........................................................6
+[init -> test-log]                                                              
+[init -> test-log] Test done.                                                   
+Warning: void Genode::Rpc_cap_factory::free(Genode::Native_capability) not impl8
+
+

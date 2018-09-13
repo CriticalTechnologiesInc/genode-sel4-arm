@@ -1,0 +1,94 @@
+This file contains necessary steps to build Genode for the SabreLite
+board using the seL4 kernel.
+
+=============
+PRE-REQUISTES
+=============
+- Pre-requistes from "../README.txt"
+- The "Update Build Script" from "README.txt" 
+- The "Create Spec Files" from "README.txt"
+
+=============
+BUILD PROCESS
+=============
+
+Most steps in this process will follow the following format:
+1 - 'cd' to the proper directory
+2 - Copy one folder, rename it, this is generally performing
+    the copy of a 'wand_quad' folder and renaming it to 'sabre_lite'
+3 - Change various files in the new 'sabre_lite' folder created to
+    remove mentions of 'wand_quad' in various forms to conform
+    to new board change.
+
+NOTE: The commands for a quick search and replace are show here for 
+convience if you are using Vim. Be sure to replace all instances of 
+WAND_QUAD, Wand_quad and wand_quad with SABRE_LITE, Sabre_lite 
+and sabre_lite respectively.
+
+STEP ONE
+--------
+cd <genode>
+./tool/ports/prepare_port sel4
+./tool/ports/prepare_port sel4_elfloader
+
+STEP TWO
+--------
+cd <genode>/repos/base-sel4/lib/mk/spec
+cp -r wand_quad/ sabre_lite
+vim kernel-sel4.mk
+	~18 s/define UART_PPTR.*IMX6_UART1_PADDR/define UART_PPTR IMX6_UART2_PADDR/
+	~31 BOARD=sabre_lite
+vim syscall-sel4.mk
+	~5 PLAT_BOARD := /sabre_lite
+
+STEP THREE
+-----------
+cd <genode>/contrib/sel4-<SHA>/src/kernel/sel4/configs/imx6
+cp -r wand_quad/ sabre_lite
+cd sabre_lite
+vim autoconf.h
+	~75 #define CONFIG_PLAT_SABRE 1
+
+OPTIONAL
+========
+If you wish to build the seL4 kernel for init the
+following must also be completed.
+
+STEP A
+------
+cd <genode>/repos/os/src/drivers/timer/epit/
+cp -r wand_quad/ sabre_lite
+cd sabre_lite
+vim target.mk
+	:%s/wand_quad/sabre_lite/g
+vim timer.cc
+	:%s/wand_quad/sabre_lite/g
+	:%s/Wand_quad/Sabre_lite/g
+
+STEP B
+------
+cd <genode>/tool/run/boot_dir
+vim sel4
+	+6 if {[have_spec sabre_lite]} { return "sabre_lite_timer_drv" } 
+
+Build seL4 Kernel (log)
+=======================
+cd <genode>
+./tool/create_builddir sabre_lite
+cd build/sabre_lite
+make clean
+make run/log KERNEL=sel4
+
+Build sel4 Kernel (init)
+========================
+cd <genode>/build/sabre_lite
+make clean
+make run/init KERNEL=sel4
+
+NOTE: Be sure you have completed the OPTIONAL section above
+for the "init" build of the kernel.
+
+Running Built Image
+===================
+See "README.txt" and the sections 'Loading Image onto SD Card'
+and 'Running SabreLite' for more details.

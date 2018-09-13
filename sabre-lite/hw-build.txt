@@ -1,0 +1,87 @@
+This file contains necessary steps to build Genode for the SabreLite
+board using the HW kernel built into Genode.
+
+=============
+PRE-REQUISTES
+=============
+- Pre-requistes from "../README.txt"
+- The "Update Build Script" from "README.txt" 
+- The "Create Spec Files" from "README.txt"
+
+=============
+BUILD PROCESS
+=============
+
+Most steps in this process will follow the following format:
+1 - 'cd' to the proper directory
+2 - Copy one folder, rename it, this is generally performing
+    the copy of a 'wand_quad' folder and renaming it to 'sabre_lite'
+3 - Change various files in the new 'sabre_lite' folder created to
+    remove mentions of 'wand_quad' in various forms to conform
+    to new board change.
+
+NOTE: The commands for a quick search and replace are show here for 
+convience if you are using Vim. Be sure to replace all instances of 
+WAND_QUAD, Wand_quad and wand_quad with SABRE_LITE, Sabre_lite 
+and sabre_lite respectively.
+
+STEP ONE
+--------
+cd <genode>/repos/base-hw/lib/mk/spec
+cp -r wand_quad/ sabre_lite
+vim bootstrap-hw.mk
+	:%s/wand_quad/sabre_lite/g
+
+STEP TWO
+--------
+cd <genode>/repos/base-hw/src/bootstrap/spec/
+cp -r wand_quad/ sabre_lite
+cd sabre_lite
+vim board.h
+	:%s/WAND_QUAD/SABRE_LITE/g
+	:%s/wand_quad/sabre_lite/g
+	:%s/Wand_quad/Sabre_lite/g
+
+STEP THREE
+----------
+cd <genode>/tool/run/boot_dir
+vim hw
+	+20 if {[have_spec "sabre_lite"]} { return "0x10001000" }
+
+STEP FOUR
+---------
+cd <genode>/repos/base-hw/lib/mk/spec/imx6
+vim core-hw.mk
+	~ # INC_DIR += ...
+	+ ifeq ($(filter-out $(SPECS),wand_quad),)
+	+	INC_DIR += $(REP_DIR)/src/core/spec/wand_quad
+	+ endif
+	+ ifeq ($(filter-out $(SPECS),sabre_lite),)
+	+	INC_DIR += $(REP_DIR)/src/core/spec/sabre_lite
+	+ endif
+
+Comment out the INC_DIR line on line 10.
+In its place add the ifeq structure above.
+
+STEP FIVE
+---------
+cd <genode>/repos/base-hw/src/core/spec
+cp -r wand_quad/ sabre_lite
+cd sabre_lite
+vim board.h
+	:%s/WAND_QUAD/SABRE_LITE/g
+	:%s/wand_quad/sabre_lite/g
+	:%s/Wand_quad/Sabre_lite/g
+
+Build HW Kernel
+===============
+cd <genode>
+./tool/create_builddir sabre_lite
+cd build/sabre_lite
+make run/log
+
+Running Built Image
+===================
+See "README.txt" and the sections 'Loading Image onto SD Card'
+and 'Running SabreLite' for more details.
+

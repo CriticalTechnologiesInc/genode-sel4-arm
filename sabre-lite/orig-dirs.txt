@@ -1,0 +1,47 @@
+Each section below is an overview of various files/folders that have
+changed and are stored here for comparison. The original location is denoted
+for replacement on a fresh Genode install. Some folders may not
+exist in a fresh install, so create them.
+
+The contrib/ folder does not exists until the following command is run:
+./tool/ports/prepare_port sel4_elfloader
+
+base/
+-----
+sabre_lite.h
+<genode>/repos/base/include/drivers/defs/sabre_lite.h
+
+sabre_lite.mk
+<genode>/repos/base/mk/spec/sabre_lite.mk
+
+base-hw/
+--------
+lib/mk/sabre_lite/
+<genode>/repos/base-hw/lib/mk/spec/sabre_lite/
+
+lib/mk/imx6/
+<genode>/repos/base-hw/lib/mk/spec/imx6/
+
+src/bootstrap/sabre_lite/
+<genode>/repos/base-hw/src/bootstrap/spec/sabre_lite/
+
+src/core/sabre_lite/
+<genode>/repos/base-hw/src/core/spec/sabre_lite/
+
+base-sel4/
+----------
+lib/mk/sabre_lite/
+<genode>/repos/base-sel4/lib/mk/spec/sabre_lite/
+
+contrib/
+--------
+sabre_lite/
+<genode>/contrib/sel4-<SHA>/src/kernel/sel4/config/imx6/sabre_lite/
+
+tool/
+-----
+create_builddir
+<genode>/tool/create_builddir
+
+hw
+<genode>/tool/run/boot_dir/hw
