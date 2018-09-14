@@ -1,0 +1,155 @@
+This contains an overview of this directory and the files 
+contained within it.
+
+This also hosts the setup instructions for u-boot and
+SD cards.
+
+================
+GENERAL OVERVIEW
+================
+
+SPL
+	A file downloaded for use on SD cards. It can be
+	obtained with the following command:
+	wget http://os.archlinuxarm.org/os/imx6/boot/wandboard/SPL
+
+u-boot.img
+	A precompiled u-boot file with the necessary changes for 
+	Wandboard Quad
+
+wandboard.h
+	This file contains a change necessary for building of
+	u-boot
+
+=============
+PREREQUISITES
+=============
+
+From apt-get (Ubuntu 18.04 LTS)
+===============================
+	sudo apt-get install bison
+	sudo apt-get install flex
+	sudo apt-get install binutils-arm-linux-gnueabihf 
+	sudo apt-get install gcc-arm-linux-gnueabihf
+	sudo apt-get install device-tree-compiler
+
+==================
+SD Card Formatting
+==================
+First run a check to find the desired device name.
+
+        sudo fdisk --list
+
+Look for the disk that has the correct size of the SD card inserted.
+Once found note the /dev/sd* name of the device. We will use sd* 
+here to denote the selected user disk.
+
+        umount /media/<user>/<device-name>
+
+The above command will unmount any partition that the SD card may
+have had that was auto mounted by Ubuntu. This should auto-complete
+however be sure that you select the correct device to unmount
+before continuing.
+
+The next step is to enter the Command Line Interface (CLI) utility known 
+as "parted". We will give it the device we wish to perform actions 
+with as its argument.
+
+        sudo parted /dev/sd*
+
+The commands from here on will be in "parted" and not on the main CLI.
+
+        mklabel msdos
+        mkpart primary fat16 1049KB 100%
+        quit
+
+Upon the "quit" command you should have returned to the main CLI. The above
+commands relabel the SD card as a type MS-DOS and create a FAT16 partition
+from 0 to 1049KB of the card. This area is unaccessible to us via standard
+GUI systems. We will now format the rest of the card and place two files
+within the unaccessible portion at that start of the SD card.
+
+=============
+SD Card Setup
+=============
+There are two ways to approach setting up the SD Card; pre-build and manually. 
+First is using the files in this given directory which have been pre-built. The
+second is to create your own files manually.
+
+The second set of instructions is both 
+	a) documentation of what was done to create the 'u-boot.img' in 
+	this directory
+	b) give a new user the rough guideline if the need arises to 
+	rebuild the image with a newer version of u-boot.
+
+Pre-built Instructions
+======================
+Follow the instructions in 'SD Card Formatting'. Return here when complete.
+Then do the following:
+
+	cd [this-dir]
+        sudo mkfs.fat /dev/sd*1
+        sudo dd if=SPL of=/dev/sd* seek=1 bs=1k
+        sudo dd if=u-boot.img of=/dev/sd* seek=69 bs=1k
+
+With that you are completed.
+
+Manual Instructions
+===================
+This section will give detail on how to manually create the necessary
+files for the SD card.
+
+u-boot Creation
+---------------
+We will clone u-boot from GitHub and build this from source.
+
+        git clone git://git.denx.de/u-boot.git
+
+Once cloned find the wandboard header file and add the define line
+above the SATA config block. A copy of this file (with the change) 
+can be found in this directory.
+
+        cd <u-boot>/include/configs/
+        vim wandboard.h
+                + #define CONFIG_CMD_ELF
+
+Once changed we can build the u-boot image.
+
+        cd <u-boot>
+        make wandboard_defconfig
+        make u-boot.img ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf-
+        
+NOTE: That these is a "-" at the end of the CROSS_COMPILE argument.
+This is NOT a mistake and must be present.
+
+The following errors and their solutions during this build process
+can be found below:
+
+	THROWN BY: make wandboard_defconfig
+	ERROR: /bin/sh: 1: bison: not found
+	SOLUTION: sudo apt-get install bison
+
+	THROWN BY: make wandboard_defconfig
+	ERROR: /bin/flex: 1: flex: not found
+	SOLUTION: sudo apt-get install flex
+
+	THROWN BY: make u-boot.img ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf-
+	ERROR: make: arm-linux-gnueabihf-gcc: Command not found
+	SOLUTION: $ sudo apt-get install binutils-arm-linux-gnueabihf 
+		        gcc-arm-linux-gnueabihf
+
+	THROWN BY: make u-boot.img ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf-
+	ERROR: Your dtc is too old, please upgrade to dtc 1.4 or newer
+	SOLUTION: $ sudo apt-get install device-tree-compiler
+
+Next follow the 'SD Card Formatting' section above. Return here when done.
+After the SD Card has been created do the following:
+
+        sudo mkfs.fat /dev/sd*1
+	cd [dir-containing-SPL-file]
+        sudo dd if=SPL of=/dev/sd* seek=1 bs=1k
+	cd [dir-containing-uboot-image-file]
+        sudo dd if=u-boot.img of=/dev/sd* seek=69 bs=1k
+
+NOTE: See the PREREQUISITES section of this file for how to obtain the
+SPL file.

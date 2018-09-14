@@ -2,11 +2,11 @@ This file contains necessary steps to build Genode for the SabreLite
 board using the seL4 kernel.
 
 =============
-PRE-REQUISTES
+PREREQUISITES
 =============
 - Pre-requistes from "../README.txt"
-- The "Update Build Script" from "README.txt" 
-- The "Create Spec Files" from "README.txt"
+- The "Update Build Script" from "sabrelite-setup.txt" 
+- The "Create Spec Files" from "sabrelite-setup.txt"
 
 =============
 BUILD PROCESS
@@ -90,5 +90,5 @@ for the "init" build of the kernel.
 
 Running Built Image
 ===================
-See "README.txt" and the sections 'Loading Image onto SD Card'
+See "sabrelite-setup.txt" and the sections 'Loading Image onto SD Card'
 and 'Running SabreLite' for more details.

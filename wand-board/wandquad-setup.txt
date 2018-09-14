@@ -1,0 +1,95 @@
+This directory contains files pertaining to the Wandboard Quad.
+This document also serves as build instructions for Genode targetting
+the Wandboard Quad platform.
+
+================
+GENERAL OVERVIEW
+================
+
+build.conf
+	A file with changes made to boot Wandboard Quad
+
+good-boot.txt
+	A file containing Minicom output of a successful
+	build/boot of "run/log" as shown how to do in
+	this file with the "hw" kernel
+
+uImage
+	A precompiled image file created for Wandboard Quad
+	using "make run/log KERNEL=sel4"
+
+=============
+PREREQUISITES
+=============
+
+From "../README.txt"
+==================== 
+Under the 'PREREQUISITES' section complete the following 
+subsections:
+	'Genode Setup'
+	'Serial Setup'
+	'SD Card Setup'
+
+====================
+Wandboard Quad Setup
+====================
+
+Genode Configuration
+====================
+Step One
+--------
+Create the build directory:
+
+	cd <genode>
+	./tool/create_builddir wand_quad
+	cd build/wand_board
+
+Step Two
+--------
+We must edit the file etc/build.conf to create a uImage instead of a ELF
+image, otherwise the board will throw an error when booting.
+
+The line below can be inserted directly after the "ifdef KERNEL" on line 20. 
+A copy of this file with the change is located in this directory.
+
+	vim etc/build.conf
+		+ RUN_OPT += --include image/uboot
+
+Build HW Kernel
+===============
+Once completed we are ready to build for the board.
+There are various options to choose from but for an initial test run 
+the following:
+
+	cd <genode>/build/wand_board/
+	make run/log KERNEL=hw
+
+The following errors and their solutions during this build process
+can be found below:
+
+	ERROR: mkimage missing
+	SOLUTION sudo apt-get install u-boot-tools
+
+	ERROR: Failed: no xmllint insalled
+	SOLUTION: sudo apt-get install libxml2-utils
+
+Loading Image onto SD Card
+==========================
+The image file will be located in "var/run/log". Copy this image into the
+OS accessible partition of the SD card. It should be named "uImage".
+
+Running Wandboard Quad
+======================
+Use the SD Card slot located next to the USB slot. Connect Wandboard to 
+your local machine using a Serial-to-USB cable and a null modem adapter.
+To boot up the Wandboard with this image apply power and enter the 
+u-boot prompt by distrupting the boot process.
+
+The following commands will boot Genode:
+
+        fatload mmc 0 0x30000000 uImage
+        bootm 0x30000000
+
+See the file "good-boot.txt" to know what the output of the above 
+image should look like.
+

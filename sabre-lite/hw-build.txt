@@ -2,11 +2,11 @@ This file contains necessary steps to build Genode for the SabreLite
 board using the HW kernel built into Genode.
 
 =============
-PRE-REQUISTES
+PREREQUISITES
 =============
 - Pre-requistes from "../README.txt"
-- The "Update Build Script" from "README.txt" 
-- The "Create Spec Files" from "README.txt"
+- The "Update Build Script" from "sabrelite-setup.txt" 
+- The "Create Spec Files" from "sabrelite-setup.txt"
 
 =============
 BUILD PROCESS
@@ -50,6 +50,9 @@ vim hw
 
 STEP FOUR
 ---------
+Comment out the INC_DIR line on line 10.
+In its place add the ifeq structure below.
+
 cd <genode>/repos/base-hw/lib/mk/spec/imx6
 vim core-hw.mk
 	~ # INC_DIR += ...
@@ -59,9 +62,6 @@ vim core-hw.mk
 	+ ifeq ($(filter-out $(SPECS),sabre_lite),)
 	+	INC_DIR += $(REP_DIR)/src/core/spec/sabre_lite
 	+ endif
-
-Comment out the INC_DIR line on line 10.
-In its place add the ifeq structure above.
 
 STEP FIVE
 ---------
@@ -82,6 +82,6 @@ make run/log
 
 Running Built Image
 ===================
-See "README.txt" and the sections 'Loading Image onto SD Card'
+See "sabrelite-setup.txt" and the sections 'Loading Image onto SD Card'
 and 'Running SabreLite' for more details.
 

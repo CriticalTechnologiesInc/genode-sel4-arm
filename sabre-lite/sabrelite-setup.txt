@@ -116,6 +116,10 @@ Connect SabreLite to your local machine using a Serial-to-USB cable
 and a null modem adapter. To boot up the SabreLite with the image 
 apply power and enter the u-boot prompt by distrupting the boot process.
 
+NOTE: That the wait time to catch u-boot is very short. You will have to
+use the reset button on the board while spamming any key in terminal 
+to stop the boot process.
+
 The following commands will boot Genode:
 	mmc dev 0
         fatload mmc 0 0x30000000 image.elf

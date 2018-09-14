@@ -1,0 +1,74 @@
+Hit any key to stop autoboot:  0
+=> fatload mmc 0 0x30000000 uImage
+735891 bytes read in 59 ms (11.9 MiB/s)
+=> bootm 0x30000000
+## Booting kernel from Legacy Image at 30000000 ...
+   Image Name:
+   Image Type:   ARM Linux Kernel Image (gzip compressed)
+   Data Size:    735827 Bytes = 718.6 KiB
+   Load Address: 20000000
+   Entry Point:  20000000
+   Verifying Checksum ... OK
+   Uncompressing Kernel Image ... OK
+
+Starting kernel ...
+
+
+ELF-loader started on CPU: ARM Ltd. Cortex-A9 r2p10
+  paddr=[20000000..201c401f]
+ELF-loading image 'kernel'
+  paddr=[10000000..10039fff]
+  vaddr=[e0000000..e0039fff]
+  virt_entry=e0000000
+ELF-loading image 'genode.elf'
+  paddr=[1003a000..102dafff]
+  vaddr=[2000000..22a0fff]
+  virt_entry=2000000
+Enabling MMU and paging
+Jumping to kernel-image entry point...
+
+Bootstrapping kernel
+Booting all finished, dropped to user space
+<<seL4(CPU 0) [decodeCNodeInvocation/106 T0xffe7cd00 "rootserver" @202c588]: CNode Copy/Mint/Move/Mutate>
+Warning: copy: seL4_CNode_Copy (0x7) returned 6
+:phys_mem_16k:     Allocator 0x21d4be4 dump:
+ Block: [10000000,10010000) size=64K avail=64K max_avail=448K
+ Block: [102dc000,1034c000) size=448K avail=448K max_avail=448K
+ => mem_size=524288 (0 MB) / mem_avail=524288 (0 MB)
+
+virtual address layout of core:
+ overall    [00002000,c0000000)
+ core image [02000000,022a1000)
+ ipc buffer [022a1000,022a2000)
+ boot_info  [022a2000,022a3000)
+ stack area [40000000,50000000)
+Warning: need physical memory, but Platform object not constructed yet
+Warning: need physical memory, but Platform object not constructed yet
+Warning: need physical memory, but Platform object not constructed yet
+boot module 'test-log' (23004 bytes)
+boot module 'init' (206976 bytes)
+boot module 'config' (342 bytes)
+boot module 'ld.lib.so' (577024 bytes)
+Warning: need physical memory, but Platform object not constructed yet
+Genode 18.02
+456 MiB RAM and 31767 caps assigned to init
+Warning: void Genode::Rpc_cap_factory::free(Genode::Native_capability) not implemented - resources leake1
+Warning: void Genode::Rpc_cap_factory::free(Genode::Native_capability) not implemented - resources leake2
+Warning: void Genode::Rpc_cap_factory::free(Genode::Native_capability) not implemented - resources leake4
+[init -> test-log] hex range:          [0e00,1680)
+[init -> test-log] empty hex range:    [0abc0000,0abc0000) (empty!)
+[init -> test-log] hex range to limit: [f8,ff]
+[init -> test-log] invalid hex range:  [f8,08) (overflow!)
+[init -> test-log] negative hex char:  0xfe
+[init -> test-log] positive hex char:  0x02
+[init -> test-log] multiarg string:    "parent -> child.7"
+[init -> test-log] String(Hex(3)):     0x3
+[init -> test-log] Very long messages:
+[init -> test-log -> log] 1.............................................................................2
+[init -> test-log] 3....................................................................................4
+[init -> test-log] 5....................................................................................6
+[init -> test-log]
+[init -> test-log] Test done.
+Warning: void Genode::Rpc_cap_factory::free(Genode::Native_capability) not implemented - resources leake8
+
+

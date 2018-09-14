@@ -1,0 +1,66 @@
+This file is a setup guide for Genode on the build system
+for either Wandboard Quad or SabreLite.
+
+This must be done before either can be built and the
+notation of <genode> from this document will be used
+in all install instructions.
+
+==============
+PRE-REQUISITES
+==============
+
+From apt-get (Ubuntu 18.04 LTS)
+===============================
+	sudo apt-get install git
+	sudo apt-get install make
+	sudo apt-get install python
+	sudo apt-get install python-pip
+	sudo pip install future
+	sudo pip install tempita
+	sudo pip install ply
+	sudo apt-get install expect
+	sudo aapt-getpt install tcl
+	sudo aapt-getpt install libxml2-utils
+	sudo apt-get install u-boot-tools
+	sudo apt-get install minicom
+
+Genode Toolchain
+================
+	wget https://sourceforge.net/projects/genode/files/genode-toolchain/17.05/genode-toolchain-17.05-x86_64.tar.xz/download
+	mv download genode-toolchain-17.05-x86_64.tar.xz
+	cd /
+	sudo tar Jxvf [path-to]/genode-toolchain-17.05-x86_64.tar.xz
+
+============
+Genode Setup
+============
+Preselected Genode versions used/tested are located in genode-zips/. 
+To obtain your own Genode zip file head to:
+	https://sourceforge.net/projects/genode/files/genode/
+
+After unzipping the selected Genode version to where you
+like, move into its directory. <genode> will denote the location
+that you have unzipped the folder.
+
+If you want a fresh copy of Genode straight from source (non-zipped):
+	git clone git://github.com/genodelabs/genode.git
+
+===============
+Genode Overview
+===============
+There are a few commands that are helpful to us which we will
+cover here:
+
+./tool/ports/list
+	This command will list all avalible ports that the current
+	Genode version supports. 
+
+./tool/ports/prepare_port [port-name]
+	This command will setup Genode to support the given port 
+	name. Port names come from the list command (above) and
+	will NOT auto-complete in bash.
+
+./tool/create_builddir [build-name]
+	This command creates the build/<build-name> directory
+	where we can create a version of Genode to run on the
+	desired system.
